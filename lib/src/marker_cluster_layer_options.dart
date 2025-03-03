@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
@@ -9,13 +7,13 @@ class PolygonOptions {
   final Color color;
   final double borderStrokeWidth;
   final Color borderColor;
-  final bool isDotted;
+  final StrokePattern pattern;
 
   const PolygonOptions({
     this.color = const Color(0xFF00FF00),
     this.borderStrokeWidth = 0.0,
     this.borderColor = const Color(0xFFFFFF00),
-    this.isDotted = false,
+    this.pattern = const StrokePattern.solid(),
   });
 }
 
@@ -120,7 +118,7 @@ class MarkerClusterLayerOptions {
   /// A cluster will cover at most this many pixels from its center
   final int maxClusterRadius;
 
-  /// Zoom buonds with animation on click cluster
+  /// Zoom bounds with animation on click cluster
   final bool zoomToBoundsOnClick;
 
   /// animations options
@@ -146,7 +144,7 @@ class MarkerClusterLayerOptions {
   final int circleSpiralSwitchover;
 
   /// Make it possible to provide custom function to calculate spiderfy shape positions
-  final List<Point> Function(int, Point)? spiderfyShapePositions;
+  final List<Offset> Function(int, Offset)? spiderfyShapePositions;
 
   /// If true show polygon then tap on cluster
   final bool showPolygon;

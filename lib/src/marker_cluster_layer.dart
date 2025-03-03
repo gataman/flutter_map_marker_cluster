@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
@@ -83,7 +81,6 @@ class _MarkerClusterLayerState extends State<MarkerClusterLayer>
     _addLayers();
 
     _zoomController.forward();
-
     super.initState();
   }
 
@@ -597,7 +594,7 @@ class _MarkerClusterLayerState extends State<MarkerClusterLayer>
       // This is the performance critical hot path recursed on every map event!
 
       // Cull markers/clusters that are not on screen.
-      if (!widget.mapCamera.pixelBounds.containsPartialBounds(
+      if (widget.mapCamera.pixelBounds.contains(
         layer.pixelBounds(widget.mapCamera),
       )) {
         return;
@@ -757,7 +754,9 @@ class _MarkerClusterLayerState extends State<MarkerClusterLayer>
     };
   }
 
-  VoidCallback _onMarkerDoubleTap(MarkerNode marker) {
+  VoidCallback? _onMarkerDoubleTap(MarkerNode marker) {
+    if (widget.options.onMarkerDoubleTap == null) return null;
+
     return () {
       if (_animating) return;
 
@@ -788,10 +787,7 @@ class _MarkerClusterLayerState extends State<MarkerClusterLayer>
             borderStrokeWidth: widget.options.polygonOptions.borderStrokeWidth,
             color: widget.options.polygonOptions.color,
             borderColor: widget.options.polygonOptions.borderColor,
-            pattern: widget.options.polygonOptions.isDotted
-                ? const StrokePattern.dotted()
-                : const StrokePattern.solid(),
-            //isDotted: widget.options.polygonOptions.isDotted,
+            pattern: widget.options.polygonOptions.pattern,
           ),
         ]);
       });
@@ -806,7 +802,7 @@ class _MarkerClusterLayerState extends State<MarkerClusterLayer>
     }
   }
 
-  List<Point?> _generatePointSpiderfy(int count, Point center) {
+  List<Offset?> _generatePointSpiderfy(int count, Offset center) {
     if (widget.options.spiderfyShapePositions != null) {
       return widget.options.spiderfyShapePositions!(count, center);
     }
